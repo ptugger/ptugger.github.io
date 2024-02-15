@@ -1,36 +1,41 @@
-name: Deploy to gh-pages
+name: GitHub Pages
 
 on:
   push:
     branches:
       - main
+  pull_request:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     permissions:
       contents: write
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-        with:
-          lfs: true
-          token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@v3
 
-      - name: Set up Node.js
+      - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '14'
 
-      - name: Install Dependencies
-        run: npm install
-
-      - name: Build and Deploy
-        run: npm run build
-
-      - name: Deploy to gh-pages
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Cache dependencies
+        uses: actions/cache@v3
         with:
-          personal_token: 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
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - run: npm ci
+      - run: npm test
+      - run: npm run generate
+
+      - name: deploy
+        uses: peaceiris/actions-gh-pages@v3
+        if: github.ref == 'refs/heads/main'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
-        
