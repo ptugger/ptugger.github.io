@@ -5,7 +5,8 @@ on:
     branches:
       - main
   pull_request:
-
+env:
+  VITE_TITLE: ${{ vars.VITE_TITLE }}
 jobs:
   deploy:
     runs-on: ubuntu-latest
