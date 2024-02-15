@@ -33,6 +33,7 @@ jobs:
         #   github_token: ${{ secrets.ACCESS_TOKEN }}
         #   publish_dir: ./dist
         env:
-          deploy_key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
+          deploy_key: ${{ secrets.ACCESS_TOKEN }}
+          github_token: ${{ secrets.ACCESS_TOKEN }}
           publish_branch: gh-pages
           publish_dir: ./dist
