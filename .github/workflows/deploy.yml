@@ -6,7 +6,7 @@ on:
       - main
   pull_request:
 env:
-  VITE_TITLE: ${{ secrets.NEW_TITLE }}
+  VITE_TITLE: ${{ secrets.GITHUB_TOKEN }}
 jobs:
   deploy:
     runs-on: ubuntu-latest
