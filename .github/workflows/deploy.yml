@@ -6,7 +6,7 @@ on:
       - main
   pull_request:
 env:
-  VITE_TITLE: ${{ vars.VITE_TITLE }}
+  VITE_TITLE: ${{ env.NEW_TITLE }}
 jobs:
   deploy:
     runs-on: ubuntu-latest
